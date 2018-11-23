@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hand.test.mapper.EmployeeMapper">
+    <resultMap id="employee" type="com.hand.test.dto.Employee">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <result column="age" property="age"></result>
+        <result column="salary" property="salary"></result>
+        <association property="department" javaType="com.hand.test.dto.Department">
+            <id column="depId" property="id"></id>
+            <result column="depName" property="name"></result>
+        </association>
+    </resultMap>
+
+    <delete id="deleteEmployee" parameterType="string">
+        delete from employee where id=#{id}
+    </delete>
+
+    <select id="selectAll" resultMap="employee">
+        SELECT
+        employee.id,
+        employee.name,
+        employee.age,
+        employee.salary,
+        department.id AS depId,
+        department.name AS depName
+        FROM
+        employee,department
+        WHERE
+        employee.department_id = department.id
+    </select>
+    <select id="selectById" resultMap="employee">
+        SELECT
+        employee.id,
+        employee.name,
+        employee.age,
+        employee.salary,
+        department.id AS depId,
+        department.name AS depName
+        FROM
+        employee,department
+        WHERE
+        employee.department_id = department.id
+        AND
+        employee.id=#{id}
+    </select>
+
+    <insert id="addEmployee" parameterType="com.hand.test.dto.Employee">
+        insert into employee(name,age,salary,department_id) values(#{name},#{age},#{salary},#{department.id})
+    </insert>
+
+    <update id="updateEmployee" parameterType="com.hand.test.dto.Employee">
+        update employee set name=#{name},age=#{age},salary=#{salary},department_id=#{department.id} where id=#{id}
+    </update>
+</mapper>

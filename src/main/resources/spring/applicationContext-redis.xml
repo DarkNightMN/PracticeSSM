@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+    ">
+
+    <!-- 引入config.properties属性文件 -->
+    <context:property-placeholder location="classpath:config.properties"/>
+
+    <bean id="redisSentinelConfiguration"
+          class="org.springframework.data.redis.connection.RedisSentinelConfiguration">
+        <property name="master">
+            <bean class="org.springframework.data.redis.connection.RedisNode">
+                <property name="name" value="${redis.monitorMaster}"/>
+            </bean>
+        </property>
+        <property name="sentinels" ref="redisNodes"/>
+    </bean>
+
+    <bean id="redisNodes" class="com.hand.hap.core.impl.RedisNodeAutoConfig">
+        <property name="sentinels" value="${redis.sentinel}"/>
+    </bean>
+
+    <!--这里添加的是Redis，因为使用的是Spring里自带的Redis的Session策略 -->
+    <bean id="v2redisConnectionFactory" class="com.hand.hap.core.JedisConnectionFactoryBean">
+
+        <property name="useSentinel" value="${redis.useSentinel}"/>
+        <property name="sentinelConfiguration" ref="redisSentinelConfiguration"/>
+
+        <property name="hostName" value="${redis.ip}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="database" value="${redis.db}"/>
+        <property name="poolConfig">
+            <bean class="redis.clients.jedis.JedisPoolConfig">
+                <property name="maxIdle" value="999"/>
+                <property name="maxTotal" value="9999"/>
+                <property name="minIdle" value="20"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="v2redisConnectionFactory" />
+
+        <!-- 序列化方式 建议key/hashKey采用StringRedisSerializer -->
+        <property name="keySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+        </property>
+        <property name="valueSerializer">
+            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+        </property>
+        <property name="hashKeySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+        </property>
+        <property name="hashValueSerializer">
+            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+        </property>
+        <!-- 开启REIDS事务支持 -->
+        <property name="enableTransactionSupport" value="false" />
+    </bean>
+
+
+</beans>

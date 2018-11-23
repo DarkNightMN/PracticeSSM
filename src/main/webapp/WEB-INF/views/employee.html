@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link type="text/css" rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
+</head>
+<body>
+<div class="container" style="margin-top: 70px;height: 500px">
+    <div class="row">
+        <h3 class="col-md-2">员工列表</h3>
+        <button class='btn-success' style="margin-top: 20px"
+                data-toggle="modal" data-target="#exampleModal">添加</button>
+    </div>
+    <table class="table table-hover" id="employees">
+        <tr>
+            <th width="200px">操作</th>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>工资</th>
+            <th>部门</th>
+        </tr>
+    </table>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">添加员工</h4>
+            </div>
+            <div class="modal-body">
+                <form id="empform" action="/addOrUpdate" method="post">
+                    <div class="form-group row">
+                        <label for="employeeName" class="control-label col-md-offset-1 col-md-2" style="margin-top: 7px">姓名</label>
+                        <input type="text" class="form-control" style="width: 70%" id="employeeName" name="name">
+                    </div>
+                    <div class="form-group row">
+                        <label for="employeeAge" class="control-label col-md-offset-1 col-md-2" style="margin-top: 7px">年龄</label>
+                        <input type="text" class="form-control" style="width: 70%" id="employeeAge" name="age">
+                    </div>
+                    <div class="form-group row">
+                        <label for="employeeSalary" class="control-label col-md-offset-1 col-md-2" style="margin-top: 7px">工资</label>
+                        <input type="text" class="form-control" style="width: 70%" id="employeeSalary" name="salary">
+                    </div>
+                    <div class="form-group row">
+                        <label for="employeeDep" class="control-label col-md-offset-1 col-md-2" style="margin-top: 7px">部门</label>
+                        <select id="employeeDep" name="department.id" style="height: 30px"></select>
+                    </div>
+                    <div class="row">
+                        <button id="confirm" type="submit" class="btn btn-primary col-md-offset-8">确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">删除员工</h4>
+            </div>
+            <div class="modal-body">
+                <form id="deleteform" action="/deleteEmployee" method="post">
+                    <div>
+                        <p>确认删除吗？
+                    </div>
+                    <div class="row">
+                        <button id="confirm2" type="submit" class="btn btn-primary col-md-offset-8">确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="/static/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+    $('#exampleModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('bind')
+
+        if(id) {
+            $("#empform").attr("action", "/addOrUpdate?id=" + id)
+            $("#exampleModalLabel").text("编辑员工")
+            $.ajax({
+                type: "POST",
+                url: "/selectEmployee",
+                data:"id="+id,
+                success: function (data) {
+                    $("#employeeName").val(data.name);
+                    $("#employeeAge").val(data.age);
+                    $("#employeeSalary").val(data.salary);
+                    $("#employeeDep").val(data.department.id);
+                }
+            })
+        }
+        else{
+            $("#exampleModalLabel").text("添加员工")
+            $("#employeeName").val("");
+            $("#employeeAge").val("");
+            $("#employeeSalary").val("");
+            $("#employeeDep").val("");
+        }
+    })
+
+    $('#deleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('bind')
+        console.log(id)
+        $("#deleteform").attr("action", "/deleteEmployee?id=" + id)
+    })
+
+    $.ajax({
+        type: "POST",
+        url: "/employees",
+        success: function (data) {
+            for (var i = 0; i < data.length; i++) {
+                var html = "<tr>" +
+                    "<td>" +
+                    "<button class='btn-default' data-toggle='modal' data-target='#exampleModal' data-bind="+data[i].id+">编辑</button>" +
+                    "<button class='btn-danger' style='margin-left: 10px' data-toggle='modal' data-target='#deleteModal' data-bind="+data[i].id+">删除</button>" +
+                    "</td>" +
+                    "<td>" + data[i].name + "</td>" +
+                    "<td>" + data[i].age + "</td>" +
+                    "<td>" + data[i].salary + "</td>" +
+                    "<td>" + data[i].department.name + "</td>" +
+                    "</tr>";
+                $("#employees").append(html)
+            }
+        }
+    });
+
+    $.ajax({
+        type: "POST",
+        url: "/departments",
+        success: function (data) {
+            for (var i = 0; i < data.length; i++) {
+                var html =
+                    "<option value="+data[i].id+">"+data[i].name + "</option>"
+                $("#employeeDep").append(html)
+            }
+        }
+    });
+</script>
+</html>
