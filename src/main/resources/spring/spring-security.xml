@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+       xmlns:beans="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+
+    <http auto-config="true">
+        <!--<intercept-url pattern="/login.html" access="permitAll"/>-->
+        <!--&lt;!&ndash;<intercept-url pattern="/resources/**" access="permitAll"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;<intercept-url pattern="/lib/**" access="permitAll"/>&ndash;&gt;-->
+        <!--<intercept-url pattern="/common/**" access="permitAll"/>-->
+        <!--<intercept-url pattern="/static/**" access="permitAll"/>-->
+        <!--&lt;!&ndash;<intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')"/>&ndash;&gt;-->
+        <intercept-url pattern="/**" access="permitAll"/>
+
+        <!--<form-login login-page="/login.html"></form-login>-->
+    </http>
+
+     <!--用户服务-->
+    <user-service id="userService">
+        <user name="alibaba" password="123456" authorities="ROLE_ADMIN" />
+        <user name="baidu" password="66666" authorities="ROLE_BAIDU" />
+    </user-service>
+
+    <!-- 认证管理器-->
+    <authentication-manager>
+        <authentication-provider user-service-ref="userService"/>
+    </authentication-manager>
+
+</beans:beans>
