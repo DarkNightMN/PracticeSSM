@@ -21,10 +21,10 @@ public class Test implements Serializable {
 
     private static final long serialVersionUID = -2178326433832024472L;
 
-    @RequestMapping("/t3")
+    @RequestMapping("/t4")
     @ResponseBody
     public String get(){
-        return "t3";
+        return "t4";
     }
 
     public static void main(String[] args) {
