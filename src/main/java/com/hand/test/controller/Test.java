@@ -2,7 +2,7 @@ package com.hand.test.controller;
 
 import com.google.gson.JsonObject;
 import com.hand.test.dto.Employee;
-import org.json.JSONObject;
+//import org.json.JSONObject;
 import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -54,7 +54,7 @@ public class Test implements Serializable {
         map.put("oldNum","001");
         map.put("datas",employee);
         System.out.println(map);
-        System.out.println(com.alibaba.fastjson.JSONObject.toJSON(map));
+//        System.out.println(com.alibaba.fastjson.JSONObject.toJSON(map));
 //        AuthenticationManager
 //        WebSecurityConfigurerAdapter
 //        LogoutHandler
