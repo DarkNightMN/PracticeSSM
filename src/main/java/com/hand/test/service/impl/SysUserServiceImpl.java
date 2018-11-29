@@ -17,12 +17,12 @@ public class SysUserServiceImpl implements SysUserService {
     private SysUserMapper sysUserMapper;
 
     @Override
-    public Integer selectByName(SysUser user) {
-        return sysUserMapper.selectByName(user);
+    public Integer existUserByName(String username) {
+        return sysUserMapper.existUserByName(username);
     }
 
     @Override
-    public SysUser selectUser(SysUser user) {
-        return sysUserMapper.selectUser(user);
+    public SysUser selectUserByName(String username) {
+        return sysUserMapper.selectUserByName(username);
     }
 }

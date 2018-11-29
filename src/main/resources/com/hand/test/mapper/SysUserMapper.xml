@@ -2,15 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hand.test.mapper.SysUserMapper">
     <resultMap id="SysUser" type="com.hand.test.dto.SysUser">
-        <result property="account" column="account"></result>
+        <result property="username" column="username"></result>
         <result property="password" column="password"></result>
+        <result property="authority" column="authority"></result>
     </resultMap>
 
-    <select id="selectByName" resultType="integer">
-        select count(1) from sys_user where account=#{account}
+    <select id="existUserByName" resultType="integer">
+        select count(1) from sys_user where username=#{username}
     </select>
-    <select id="selectUser" resultMap="SysUser">
-        select account,password from sys_user where account=#{account} and password=#{password}
+    <select id="selectUserByName" resultMap="SysUser">
+        select username,password,authority from sys_user where username=#{username}
     </select>
 
 

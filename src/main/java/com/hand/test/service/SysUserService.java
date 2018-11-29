@@ -9,8 +9,8 @@ import com.hand.test.dto.SysUser;
 public interface SysUserService {
 
     // 用户是否存在
-    Integer selectByName(SysUser user);
+    Integer existUserByName(String username);
 
     // 用户信息
-    SysUser selectUser(SysUser user);
+    SysUser selectUserByName(String username);
 }

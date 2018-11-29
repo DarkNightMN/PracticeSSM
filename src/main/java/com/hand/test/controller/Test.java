@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Controller;
@@ -40,19 +41,20 @@ public class Test implements Serializable {
     }
 
     public static void main(String[] args) {
-        Jedis j=new Jedis("106.12.86.12",6379);
-        j.set("123","12");
-        System.out.println(j.get("123"));
-        ArrayList a=new ArrayList();
-        a.add("123");
-        a.add(true);
-        a.size();
-        Map<String,Object> map=new HashMap<>();
-        Employee employee=new Employee();
-        employee.setAge("10");
-        map.put("oldNum","001");
-        map.put("datas",employee);
-        System.out.println(map);
+//        Jedis j=new Jedis("106.12.86.12",6379);
+//        j.set("123","12");
+//        System.out.println(j.get("123"));
+//        ArrayList a=new ArrayList();
+//        a.add("123");
+//        a.add(true);
+//        a.size();
+//        Map<String,Object> map=new HashMap<>();
+//        Employee employee=new Employee();
+//        employee.setAge("10");
+//        map.put("oldNum","001");
+//        map.put("datas",employee);
+//        System.out.println(map);
+        System.out.println(new BCryptPasswordEncoder().encode("123456"));
 //        System.out.println(com.alibaba.fastjson.JSONObject.toJSON(map));
 //        AuthenticationManager
 //        WebSecurityConfigurerAdapter

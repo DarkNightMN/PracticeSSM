@@ -6,7 +6,7 @@
        http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/security
-       http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+       http://www.springframework.org/schema/security/spring-security.xsd">
 
     <http auto-config="true">
         <!--<intercept-url pattern="/login.html" access="permitAll"/>-->
@@ -15,23 +15,29 @@
         <!--<intercept-url pattern="/common/**" access="permitAll"/>-->
         <!--<intercept-url pattern="/static/**" access="permitAll"/>-->
         <!--&lt;!&ndash;<intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')"/>&ndash;&gt;-->
-        <intercept-url pattern="/**" access="permitAll"/>
+        <intercept-url pattern="/**" access="hasRole('ADMIN')"/>
 
-        <form-login
-                default-target-url="/login.html"
-                always-use-default-target="true"
-        ></form-login>
+        <form-login default-target-url="/login.html" always-use-default-target="true" />
     </http>
 
-     <!--用户服务-->
-    <user-service id="userService">
-        <user name="alibaba" password="123456" authorities="ROLE_ADMIN" />
-        <user name="baidu" password="66666" authorities="ROLE_BAIDU" />
-    </user-service>
 
     <!-- 认证管理器-->
     <authentication-manager>
-        <authentication-provider user-service-ref="userService"/>
+        <authentication-provider ref="daoAuthenticationProvider"/>
     </authentication-manager>
+
+    <beans:bean id="daoAuthenticationProvider"
+                class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+        <beans:property name="userDetailsService" ref="userService"></beans:property>
+        <beans:property name="passwordEncoder" ref="passwordEncoder" />
+    </beans:bean>
+
+    <beans:bean id="userService"
+                class="com.hand.test.security.MyUserDetailsService">
+    </beans:bean>
+
+    <beans:bean id="passwordEncoder"
+                class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+    </beans:bean>
 
 </beans:beans>
