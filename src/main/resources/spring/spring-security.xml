@@ -17,7 +17,10 @@
         <!--&lt;!&ndash;<intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')"/>&ndash;&gt;-->
         <intercept-url pattern="/**" access="permitAll"/>
 
-        <!--<form-login login-page="/login.html"></form-login>-->
+        <form-login
+                default-target-url="/login.html"
+                always-use-default-target="true"
+        ></form-login>
     </http>
 
      <!--用户服务-->
