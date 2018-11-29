@@ -1,2 +1,2 @@
-master
-release
+release1
+release2
