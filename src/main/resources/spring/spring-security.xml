@@ -9,20 +9,31 @@
        http://www.springframework.org/schema/security/spring-security.xsd">
 
     <http auto-config="true">
-        <!--<intercept-url pattern="/login.html" access="permitAll"/>-->
-        <!--&lt;!&ndash;<intercept-url pattern="/resources/**" access="permitAll"/>&ndash;&gt;-->
-        <!--&lt;!&ndash;<intercept-url pattern="/lib/**" access="permitAll"/>&ndash;&gt;-->
-        <!--<intercept-url pattern="/common/**" access="permitAll"/>-->
-        <!--<intercept-url pattern="/static/**" access="permitAll"/>-->
-        <!--&lt;!&ndash;<intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')"/>&ndash;&gt;-->
+
+        <!--防403-->
+        <csrf disabled="true" />
+
+        <!--登录页权限-->
+        <intercept-url pattern="/login.html" access="permitAll"/>
+        <intercept-url pattern="/loginAuth" access="permitAll"/>
+
+        <!--静态资源权限-->
+        <intercept-url pattern="/resources/**" access="permitAll"/>
+        <intercept-url pattern="/lib/**" access="permitAll"/>
+        <intercept-url pattern="/common/**" access="permitAll"/>
+        <intercept-url pattern="/static/**" access="permitAll"/>
+
+        <!--其余权限-->
         <intercept-url pattern="/**" access="hasRole('ADMIN')"/>
 
-        <form-login default-target-url="/login.html" always-use-default-target="true" />
+        <!--自定义登录页-->
+        <form-login login-page="/login.html" />
+
     </http>
 
 
     <!-- 认证管理器-->
-    <authentication-manager>
+    <authentication-manager alias="authenticationManager">
         <authentication-provider ref="daoAuthenticationProvider"/>
     </authentication-manager>
 
