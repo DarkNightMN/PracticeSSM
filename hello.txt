@@ -1,2 +1,2 @@
-release1
-release2
+r1
+r2
